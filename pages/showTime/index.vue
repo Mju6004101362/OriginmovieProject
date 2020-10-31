@@ -9,12 +9,10 @@
             <h2>รอบฉาย</h2>
           </div>
           <hr />
-          <div style="margin-top: 32px">
+          <div>
             <input type="date" v-model="date" @change="get_date()" />
-             <a href=""><button>รอบฉาย</button></a>
           </div>
           <hr style="margin-top: 32px" />
-          <!-- {{movielist}} -->
           <div v-if="this.movielist == ''">ไม่มีรอบหนัง!</div>
           <div
             class="grid"
@@ -42,19 +40,19 @@
                 </h4>
                 <div style="padding-top: 16px">
                   <button
-                    @click="get_movieDetail(index, i, i.seat_time1, 1)"
+                    @click="get_movieDetail(i, i.seat_time1, 1)"
                     v-if="i.seat_time1"
                   >
                     {{ i.seat_time1 }}
                   </button>
                   <button
-                    @click="get_movieDetail(index, i, i.seat_time2, 2)"
+                    @click="get_movieDetail(i, i.seat_time2, 2)"
                     v-if="i.seat_time2"
                   >
                     {{ i.seat_time2 }}
                   </button>
                   <button
-                    @click="get_movieDetail(index, i, i.seat_time3, 3)"
+                    @click="get_movieDetail(i, i.seat_time3, 3)"
                     v-if="i.seat_time3"
                   >
                     {{ i.seat_time3 }}
@@ -275,12 +273,12 @@ export default {
       this.get_movie()
     },
 
-    get_movieDetail(index, movie, seat_time, num) {
-      this.theater = index
+    get_movieDetail(movie, seat_time, num) {
       this.time_select = seat_time
       this.cart = movie
+      this.count = 0
       var storageRef = firebase.storage().ref()
-      var poster = storageRef.child(`images/2020-10-25/${this.cart.img_url}`)
+      var poster = storageRef.child(`images/${this.date}/${this.cart.img_url}`)
       // Get the download URL
       poster
         .getDownloadURL()
@@ -303,42 +301,16 @@ export default {
         }
         this.seat_select = []
       }
-      if (this.theater == 0) {
-        if (num == 1) {
-          this.theater_room = '1'
-          this.sub_theater_room = '1'
-        } else if (num == 2) {
-          this.theater_room = '1'
-          this.sub_theater_room = '2'
-        } else if (num == 3) {
-          this.theater_room = '1'
-          this.sub_theater_room = '3'
-        }
-      } else if (this.theater == 1) {
-        if (num == 1) {
-          this.theater_room = '2'
-          this.sub_theater_room = '1'
-        } else if (num == 2) {
-          this.theater_room = '2'
-          this.sub_theater_room = '2'
-        } else if (num == 3) {
-          this.theater_room = '2'
-          this.sub_theater_room = '3'
-        }
-      } else if (this.theater == 2) {
-        if (num == 1) {
-          this.theater_room = '3'
-          this.sub_theater_room = '1'
-        } else if (num == 2) {
-          this.theater_room = '3'
-          this.sub_theater_room = '2'
-        } else if (num == 3) {
-          this.theater_room = '3'
-          this.sub_theater_room = '3'
-        }
+      if (num == 1) {
+        this.sub_theater_room = '1'
+      } else if (num == 2) {
+        this.sub_theater_room = '2'
+      } else if (num == 3) {
+        this.sub_theater_room = '3'
       }
+      console.log(this.cart.t_num, '-', this.sub_theater_room)
       var docRef = db
-        .collection(`theater${this.theater_room}-${this.sub_theater_room}`)
+        .collection(`theater${this.cart.t_num}-${this.sub_theater_room}`)
         .doc(this.cart.date_input)
       docRef
         .get()
@@ -412,7 +384,7 @@ export default {
           )
         }
 
-        db.collection(`theater${this.theater_room}-${this.sub_theater_room}`)
+        db.collection(`theater${this.cart.t_num}-${this.sub_theater_room}`)
           .doc(this.cart.date_input)
           .update({
             detail: this.seat_theater,
@@ -503,7 +475,7 @@ export default {
   font-family: 'Prompt', sans-serif;
 }
 
-.container .showTime .box input  {
+.container .showTime .box input {
   width: 160px;
   height: 40px;
   border: 1px solid #d39e00;
@@ -531,18 +503,8 @@ export default {
   padding: 16px 0;
 }
 
-.container .showTime .box .header h2  {
+.container .showTime .box .header h2 {
   color: #d39e00;
-}
-.container .showTime .box button {
-  margin: 8px 0;
-  width: 60px;
-  height: 30px;
-  border: none;
-  border-radius: 4px;
-  background-color: #ecb100;
-  cursor: pointer;
-  transition: 0.3s;
 }
 
 .container .showTime .box hr {

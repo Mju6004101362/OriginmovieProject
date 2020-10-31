@@ -62,7 +62,7 @@ export default {
             var storageRef = firebase.storage().ref()
             for (let i = 0; i < this.movielist.detail.length; i++) {
               var poster = storageRef.child(
-                `images/2020-10-25/${this.movielist.detail[i].img_url}`
+                `images/${this.date}/${this.movielist.detail[i].img_url}`
               )
               // Get the download URL
               poster
