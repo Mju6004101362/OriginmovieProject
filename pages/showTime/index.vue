@@ -190,7 +190,7 @@
             <h4>ราคารวม : {{ count_format }} บาท</h4>
           </div>
           <h4 style="color: red">
-            ***โปรดแคปหน้าจอนี้เพื่อนำไปชำระเงินต่อพนักงาน***
+            ***โปรดแคปหน้าจอนี้เพื่อนำไปชำระเงินต่อพนักงาน กรุณาไปก่อนหนังฉาย 40 นาที***
           </h4>
           <div style="margin-top: 32px">
             <a href="/showTime"><button>กลับไปหน้าแรก</button></a>
@@ -450,7 +450,12 @@ export default {
     this.date = url.searchParams.get('date')
     if (this.date == null) {
       var d = new Date()
-      this.date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
+      var month = '' + (d.getMonth() + 1)
+      var day = '' + d.getDate()
+      var year = d.getFullYear()
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+      this.date = [year, month, day].join('-')
       console.log(this.date)
     }
     this.get_movie()
