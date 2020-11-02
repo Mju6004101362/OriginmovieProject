@@ -1,6 +1,7 @@
 <template>
-<div class="box">
+<div class="box" v-if="authenticatedUser">
     <!-- {{list}} -->
+    <!-- {{authenticatedUser}} -->
     <h3>เพิ่มรอบหนัง</h3>
     <div style="padding-top: 32px">
         <h4>เลือกโรงหนัง</h4>
@@ -95,7 +96,11 @@ export default {
             time_show2: '',
             time_show3: '',
             detail: [],
+            authenticatedUser: null,
         }
+    },
+    created() {
+        firebase.auth().onAuthStateChanged(user => (this.authenticatedUser = user))
     },
     methods: {
         select_theater(t) {

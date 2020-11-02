@@ -1,6 +1,7 @@
 import firebase from 'firebase'
 import 'firebase/firestore'
 import 'firebase/storage'
+import 'firebase/auth' 
 if (!firebase.apps.length) {
   const firebaseConfig = {
     apiKey: 'AIzaSyBda1ADWAUrviIirvtI4YuHvZbzI6JrCc4',
@@ -18,3 +19,4 @@ if (!firebase.apps.length) {
 export const db = firebase.firestore()
 export const storageRef = firebase.storage().ref()
 export const imagesRef = storageRef.child('images/')
+
